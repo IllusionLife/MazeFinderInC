@@ -17,7 +17,16 @@ Legend:
 Rules:
 Walls - Unable to cross under any curcumstances
 Path - Can be freely crossed
-Door - Acts as a wall until corresponding pressure plate is pressed. Coding on door corresponds to pressure plate with a value of (door + 100)
+Door - Acts as a wall until corresponding pressure plate is pressed. Coding on door corresponds to pressure plate with a value of (door + 100).
+Door will remain unlocked for 20 turns after plate was pressed. If player is on door on the same turn, that the door gets locked again, he will not be able to cross it and will have to turn to previous position.
+Pressure plate - Can unlock doors with corresponding number. It will unlock the corresponding door for 20 turns.
+
+Restrictions:
+1 <= playerX,playerY < 50
+1 <= sizeX,sizeY < 50
+0 <= doors <= 20
+0 <= plate <= 20
+One door = One plate (No door has more than one corresponding plate and vice versa)
 
 EXAMPLE 1:
 INPUT.TXT
