@@ -22,7 +22,7 @@ Door - Acts as a wall until corresponding pressure plate is pressed. Coding on d
 EXAMPLE 1:
 INPUT.TXT
 
-_**2 2
+**2 2
 8 6
 -1 -1 -1 -1 -1 -1 -1 -1
 -1  0  0  0  7  0  0  0
@@ -30,7 +30,7 @@ _**2 2
 -1  0 -1 -1 107-1 -1 -1
 -1  0  0  0  0 -1 -1 -1
 -1 -1 -1 -1 -1 -1 -1 -1
-**_
+**
 
 OUTPUT.TXT
 20
