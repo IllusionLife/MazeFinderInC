@@ -6,7 +6,6 @@ int main(int argc, char *argv[]) {
     int playerX = 0, playerY = 0;
     int sizeX = 0, sizeY = 0;
     int exitX = 0, exitY = 0;
-    char dataToBeRead[200];
     char* filePath;
     FILE *fp;
 
@@ -34,7 +33,6 @@ int main(int argc, char *argv[]) {
     }
     fclose(fp); // closing file pointer after processing all info
     
-    
     // creating new file
     FILE *outfp = fopen("OUTPUT.TXT", "w+");
     
@@ -46,6 +44,8 @@ int main(int argc, char *argv[]) {
         }
         fprintf (outfp, "\n");
     }
+    int initPos[] = {0,0};
+    int turns = findExit(initPos, labyrinthLayout, sizeX, sizeY);
     
     // Freeing up dynamic memory
     for (int i = 0; i < sizeY; i++)

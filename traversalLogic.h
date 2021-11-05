@@ -1,7 +1,6 @@
 #ifndef TRAVERSE_TOWN
 #define TRAVERSE_TOWN
 
-extern int sizeX;
-extern int sizeY;
-extern int **labyrinthLayout;
+int findExit(int lastPos[], int **layout, int xsize, int ysize);
+
 #endif
