@@ -1,16 +1,19 @@
 #include <stdio.h>
 #include "traversalLogic.h"
 
-int sizeX, sizeY;
+int *sizeX, *sizeY;
+int *playerX, *playerY;
 int **labPtr;
 int res[] = {0, 0};
 
+int keys[29] = {0};
+
 void checkUpperSide(int i) {
-    for (i++; i < sizeX; i++)
+    for (i++; i < (*sizeX); i++)
     {
         res[0] = 0;
         res[1] = i;
-        if (labPtr[0][i] == 0)
+        if (labPtr[0][i] > -1)
         {
             res[1] = i;
             return;
@@ -21,12 +24,12 @@ void checkUpperSide(int i) {
 }
 
 void checkLowerSide(int i) {
-    res[0] = sizeY - 1;
+    res[0] = (*sizeY) - 1;
     res[1] = i;
-    for (i++; i < sizeX; i++)
+    for (i++; i < (*sizeX); i++)
     {
         res[1] = i;
-        if (labPtr[sizeY-1][i] == 0)
+        if (labPtr[(*sizeX) - 1][i] > -1)
         {
             res[1] = i;
             return;
@@ -39,10 +42,10 @@ void checkLowerSide(int i) {
 void checkLeftSide(int i) {
     res[0] = i;
     res[1] = 0;
-    for (i++; i < sizeY; i++)
+    for (i++; i < (*sizeY); i++)
     {
         res[0] = i;
-        if (labPtr[i][0] == 0)
+        if (labPtr[i][0] > -1)
         {
             res[0] = i;
             return;
@@ -54,11 +57,11 @@ void checkLeftSide(int i) {
 
 void checkRightSide(int i) {
     res[0] = i;
-    res[1] = sizeX - 1;
-    for (i++; i < sizeY; i++)
+    res[1] = (*sizeX) - 1;
+    for (i++; i < (*sizeY); i++)
     {
         res[0] = i;
-        if (labPtr[i][sizeX-1] == 0)
+        if (labPtr[i][(*sizeX) - 1] > -1)
         {
             res[0] = i;
             return;
@@ -68,8 +71,62 @@ void checkRightSide(int i) {
     res[1] = -1;
 }
 
-void reachPlayer(int *exitCoord) {
-    printf("X: %d Y: %d\n", (*exitCoord + 1), (*(exitCoord + 1) + 1));
+int reachPlayer(int *exitCoord, int steps) {
+    int temp = 0;
+    int *resTemp = exitCoord;
+    printf("Pass!\n");
+    if ((*playerX) == exitCoord[0])
+    {
+        if ((*playerY) == exitCoord[1])
+        {
+            return 1;
+        }
+    }
+    if (labPtr[exitCoord[0]][(exitCoord[1] + 1)] == 0 && (exitCoord[1] + 1) < *sizeY)
+    {
+        resTemp[1]++;
+        temp = reachPlayer(resTemp, (steps + 1));
+        if (temp != -1)
+        {
+            printf("%d -", steps + 1);
+            return temp;
+        }
+        resTemp[1]--;
+    }
+    if (labPtr[exitCoord[0]][(exitCoord[1] - 1)] == 0 && (exitCoord[1] + 1) > 0)
+    {
+        resTemp[1]--;
+        temp = reachPlayer(resTemp, (steps + 1));
+        if (temp != -1)
+        {
+            printf("%d -", steps + 1);
+            return temp;
+        }
+        resTemp[1]++;
+    }
+    if (labPtr[(exitCoord[0] + 1)][exitCoord[1]] == 0 && (exitCoord[0] + 1) < *sizeX)
+    {
+        resTemp[0]++;
+        temp = reachPlayer(resTemp, (steps + 1));
+        if (temp != -1)
+        {
+            printf("%d -", steps + 1);
+            return temp;
+        }
+        resTemp[1]--;
+    }
+    if (labPtr[(exitCoord[0] + 1)][exitCoord[1]] == 0 && (exitCoord[0] + 1) > 0)
+    {
+        resTemp[0]--;
+        temp = reachPlayer(resTemp, (steps + 1));
+        if (temp != -1)
+        {
+            printf("%d -", steps + 1);
+            return temp;
+        }
+        resTemp[1]++;
+    }
+    return -1;
 }
 
 void resetRes() {
@@ -77,18 +134,19 @@ void resetRes() {
     res[1] = -1;
 }
 
-
-int findExit(int lastPos[], int **layout, int xsize, int ysize) {
+int findExit(int lastPos[], int *playerCoordX, int *playerCoordY, int *xsize, int *ysize, int **layout)
+{
     labPtr = layout;
     sizeX = xsize;
     sizeY = ysize;
+    playerX = playerCoordX;
+    playerY = playerCoordY;
     do 
     {
         checkUpperSide(*(res + 1));
         if (*res != -1)
         {
-            printf("Up: ");
-            reachPlayer(res);
+            reachPlayer(res, 0);
         }
         
     } while (*res != -1);
@@ -97,8 +155,7 @@ int findExit(int lastPos[], int **layout, int xsize, int ysize) {
         checkLowerSide(*(res + 1));
         if (*res != -1)
         {
-            printf("Down: ");
-            reachPlayer(res);
+            reachPlayer(res, 0);
         }
         
     } while (*res != -1);
@@ -107,8 +164,7 @@ int findExit(int lastPos[], int **layout, int xsize, int ysize) {
         checkLeftSide(*res);
         if (*res != -1)
         {
-            printf("Left: ");
-            reachPlayer(res);
+            reachPlayer(res, 0);
         }
         
     } while (*res != -1);
@@ -117,8 +173,7 @@ int findExit(int lastPos[], int **layout, int xsize, int ysize) {
         checkRightSide(*res);
         if (*res != -1)
         {
-            printf("Right: ");
-            reachPlayer(res);
+            reachPlayer(res, 0);
         }
         
     } while (*res != -1);
